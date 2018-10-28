@@ -28,11 +28,24 @@ public class MeatLoversPizza extends Pizza {
 	 * @param quantity - The number of pizzas ordered 
 	 * @param orderTime - The time that the pizza order was made and sent to the kitchen 
 	 * @param deliveryTime - The time that the pizza was delivered to the customer
-	 * @throws PizzaException if supplied parameters are invalid 
+	 * @throws PizzaException if supplied parameters are invalid, exceptions will be rethrown into the GUI
 	 *
 	 */
+	
+	private static String type = "Meat Lovers";
+	private static double price = 12.0;
+	
 	public MeatLoversPizza(int quantity, LocalTime orderTime, LocalTime deliveryTime) throws PizzaException {
-		// TO DO
+		super(quantity, orderTime, deliveryTime, type, price);
+		
+		Toppings.removeAll(Toppings);
+		Toppings.add(PizzaTopping.TOMATO);
+		Toppings.add(PizzaTopping.CHEESE);
+		Toppings.add(PizzaTopping.BACON);
+		Toppings.add(PizzaTopping.PEPPERONI);
+		Toppings.add(PizzaTopping.SALAMI);
+		numOfToppings = 5;
 	}
 
 }
+

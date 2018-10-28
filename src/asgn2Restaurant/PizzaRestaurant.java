@@ -3,6 +3,9 @@ package asgn2Restaurant;
 import java.util.ArrayList;
 
 import asgn2Customers.Customer;
+import asgn2Exceptions.CustomerException;
+import asgn2Exceptions.LogHandlerException;
+import asgn2Exceptions.PizzaException;
 import asgn2Pizzas.Pizza;
 
 /**
@@ -14,14 +17,14 @@ import asgn2Pizzas.Pizza;
  *  Any exceptions raised by one of the methods called by this class should be passed to asgn2GUIs.PizzaGUI so that it can be shown to
  *  the user.
  * 
- * @author Person A and Person B
+ * @author Yu Gen Yeap and Anderson Lee
  *
  */
 public class PizzaRestaurant {
 
 	private ArrayList<Customer> customers;
 	private ArrayList<Pizza> pizzas;
-
+	private double totalProfit;
 	
 	/**
 	 * Creates an instance of the PizzaRestaurant and sets the customers and pizzas fields to
@@ -32,7 +35,11 @@ public class PizzaRestaurant {
 	 * 
 	 */
 	public PizzaRestaurant() {
-		// TO DO
+		customers = new ArrayList<Customer>();
+		pizzas = new ArrayList<Pizza>();
+		this.customers.clear();
+		this.pizzas.clear();
+		
 	}
 
 	/**
@@ -40,38 +47,63 @@ public class PizzaRestaurant {
 	 * The other classes that the method interacts with are listed in Section 11 of the specification document. 
      *
      * <P> PRE: TRUE
-     * <P>POST: If no exception is thrown then the customers and pizzas fields are populated with the details in the log file ordered as they appear in teh log file.
+     * <P>POST: If no exception is thrown then the customers and pizzas fields are populated with the 
+     * details in the log file ordered as they appear in the log file.
      * <P>      If an exception is thrown then the customers and pizzas fields should be empty.
      * 
 	 * @param filename The log's filename
-	 * @return true if the file was process correctly otherwise false
-	 * @throws CustomerException If the log file contains semantic errors leading that violate the customer constraints listed in Section 5.3 of the Assignment Specification or contain an invalid customer code (passed by another class).
-	 * @throws PizzaException If the log file contains semantic errors leading that violate the pizza constraints listed in Section 5.3 of the Assignment Specification or contain an invalid pizza code (passed by another class).
-	 * @throws LogHandlerException If there was a problem with the log file not related to the semantic errors above (passed by another class).
+	 * @return true if the file was processed correctly 
+	 * @throws CustomerException If the log file contains semantic errors leading that violate 
+	 * the customer constraints listed in Section 5.3 of the Assignment Specification or contain 
+	 * an invalid customer code (passed by another class). Exceptions will be thrown into the GUI
+	 * @throws PizzaException If the log file contains semantic errors leading that violate the
+	 *  pizza constraints listed in Section 5.3 of the Assignment Specification or contain an invalid 
+	 *  pizza code (passed by another class). Exceptions will be thrown into the GUI
+	 * @throws LogHandlerException If there was a problem with the log file not related to the semantic errors 
+	 * above (passed by another class). Exceptions will be thrown into the GUI
      *
 	 */
 	public boolean processLog(String filename) throws CustomerException, PizzaException, LogHandlerException{
-		// TO DO
+		
+		try {
+			this.customers = LogHandler.populateCustomerDataset(filename);
+			this.pizzas = LogHandler.populatePizzaDataset(filename);
+			return true;
+		} catch (CustomerException exception) {
+			exception.printStackTrace();
+			throw exception;
+		}  catch (PizzaException exception) {
+			exception.printStackTrace();
+			throw exception;
+		}  catch (LogHandlerException exception) {
+			exception.printStackTrace();
+			throw exception;
+		}
 	}
 
 	/**
 	 * Returns the Customer object contained at the specified index of the customers field. The index should be the same as the index in the log file.
 	 * @param index - The index within the customers field to retrieve.
 	 * @return The Customer object located at the specified index.
-	 * @throws CustomerException if index is invalid.
+	 * @throws CustomerException if the index specified is less than 0 or greater than the number of customer orders placed
 	 */
 	public Customer getCustomerByIndex(int index) throws CustomerException{
-		// TO DO
+		if ( index < 0 || index > getNumCustomerOrders()) throw new CustomerException("Error: index is less than 0 or out of bounds");
+		return this.customers.get(index);
 	}
 	
 	/**
 	 * Returns the Pizza object contained at the specified index of the pizzas field. The index should be the same as the index in the log file.
 	 * @param index - The index within the pizzas field to retrieve.
 	 * @return The Pizza object located at the specified index.
-	 * @throws PizzaException if index is invalid.
+	 * @throws PizzaException if the index specified is less than 0 or greater than the number of pizza orders.
 	 */	
 	public Pizza getPizzaByIndex(int index) throws PizzaException{
-		// TO DO
+		if(index < 0 || index > getNumPizzaOrders()){
+			throw new PizzaException("Invalid index");
+		}
+		return this.pizzas.get(index);
+
 	}
 	
 	/**
@@ -81,7 +113,7 @@ public class PizzaRestaurant {
 	 * @return the number of objects contained in the pizzas field.
 	 */
 	public int getNumPizzaOrders(){
-		// TO DO
+		return pizzas.size();
 	}
 
 	/**
@@ -91,7 +123,7 @@ public class PizzaRestaurant {
 	 * @return the number of objects contained in the customers field.
 	 */
 	public int getNumCustomerOrders(){
-		// TO DO
+		return this.customers.size();
 	}
 
 			
@@ -102,7 +134,12 @@ public class PizzaRestaurant {
 	 * @return the total delivery distance for all Customers objects in the customers field.
 	 */
 	public double getTotalDeliveryDistance(){
-		// TO DO
+		double sum=0;
+		for (Customer x : this.customers) {
+			double d=Math.abs(x.getDeliveryDistance());
+			sum += d;
+		}
+		return sum;
 	}
 
 	/**
@@ -111,7 +148,12 @@ public class PizzaRestaurant {
 	 * @return the total profit for all of the Pizza objects in the pizzas field.
 	 */	
 	public double getTotalProfit(){
-		// TO DO
+		totalProfit = 0;
+		for(int i=0 ; i <= getNumPizzaOrders() -1; i++){
+			totalProfit += pizzas.get(i).getOrderProfit();
+		}
+		return totalProfit;
+
 	}
 	
 	/**
@@ -121,7 +163,8 @@ public class PizzaRestaurant {
 	 * <P> POST:  The pizzas and customers fields are set to their initial empty states
 	 */
 	public void resetDetails(){
-		// TO DO
+		this.customers.clear();
+		this.pizzas.clear();
 	}
 
 }

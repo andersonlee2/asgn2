@@ -9,7 +9,7 @@ import asgn2Exceptions.PizzaException;
  * The classes are instantiated from one of the three valid pizza codes outlined in
  * Section 5.3 of the Assignment Specification. Any other code will throw a PizzaException.      
  *  
- * @author Person A
+ * @author Yu Gen Yeap
  *
  */
 
@@ -28,8 +28,25 @@ public class PizzaFactory {
 	 * @throws PizzaException if the pizzaCode is not one of the three valid codes listed in Section 5.3 of the Assignment Specification. 
 	 * @return A valid Pizza object using the specified parameters 
 	 * */
+	
+	
 	public static Pizza getPizza(String pizzaCode, int quantity, LocalTime orderTime, LocalTime deliveryTime) throws PizzaException{
-		// TO DO
+		Pizza pizzaType;
+		switch(pizzaCode){
+			case "PZM":
+				pizzaType = new MargheritaPizza(quantity,orderTime,deliveryTime);
+				return pizzaType;
+			case "PZV":
+				pizzaType = new VegetarianPizza(quantity,orderTime,deliveryTime);
+				return pizzaType;
+			case "PZL":
+				pizzaType = new MeatLoversPizza(quantity,orderTime,deliveryTime);
+				return pizzaType;
+			default:
+				throw new PizzaException("Invalid Pizza Code");
+		}
 	}
 
 }
+
+

@@ -1,0 +1,2 @@
+21:17:00,21:27:00, Clueless Customer,0602547760,DVC,-1,0,PZV,8
+19:17:00,21:27:00, Mr Pizza,0602547760,PUC,0,0,ice cream,5

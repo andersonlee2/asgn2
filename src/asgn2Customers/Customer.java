@@ -8,7 +8,7 @@ import asgn2Exceptions.CustomerException;
  *  the abstract method getDeliveryDistance. A description of the class's
  * fields and their constraints is provided in Section 5.2 of the Assignment Specification.  
  * 
- * @author Person B
+ * @author Anderson Lee
 */
 public abstract class Customer {
 
@@ -30,8 +30,43 @@ public abstract class Customer {
 	 * @throws CustomerException if supplied parameters are invalid 
 	 * 
 	 */
+	
+	private String name;
+	private String mobileNumber;
+	private int locationX;
+	private int locationY;
+	private String type;
+	
 	public Customer(String name, String mobileNumber, int locationX, int locationY, String type) throws CustomerException{
-		// TO DO
+		
+		// check if customer is more than 10 blocks in any direction
+		if ( locationX > 10 || locationX < -10 || locationY > 10 || locationY < -10 ){
+			String exceptionMessage= String.format("Dear %s at %d,%d. "
+					+ "The restaurant will not deliver more than 10 blocks north, south, east or west", 
+					name,locationX, locationY );
+			throw new CustomerException(exceptionMessage);
+		}
+		
+		//check if name input is invalid.
+		if ( name.length() >20 || name.length() <1 || name == "" ) {
+			throw new CustomerException( "Invalid Name Input" ) ;
+		}
+		
+		//check if mobile input is valid
+		if ( mobileNumber.length() >10 || mobileNumber.length() <10 || mobileNumber.isEmpty() ) {
+			throw new CustomerException ( "Mobile number must be 10 digits") ;
+		}
+		
+		//check if mobile begins with 0 
+		if  ( !mobileNumber.startsWith("0" ) ) {
+			throw new CustomerException ( "Mobile must begin with 0");
+		}
+		
+		this.name = name;
+		this.mobileNumber = mobileNumber;
+		this.locationX = locationX;
+		this.locationY = locationY;
+		this.type = type;
 	}
 	
 	/**
@@ -39,7 +74,7 @@ public abstract class Customer {
 	 * @return The Customer's name.
 	 */
 	public final String getName(){
-		// TO DO
+		return this.name;
 	}
 	
 	/**
@@ -47,7 +82,7 @@ public abstract class Customer {
 	 * @return The Customer's mobile number.
 	 */
 	public final String getMobileNumber(){
-		// TO DO
+		return this.mobileNumber;
 	}
 
 	/**
@@ -56,7 +91,7 @@ public abstract class Customer {
 	 * @return A human understandable description of the Customer's type.
 	 */
 	public final String getCustomerType(){
-		// TO DO
+		return this.type;
 	}
 	
 	/**
@@ -65,7 +100,7 @@ public abstract class Customer {
 	 * @return The Customer's X location
 	 */
 	public final int getLocationX(){
-		// TO DO
+		return this.locationX;
 	}
 
 	/**
@@ -74,7 +109,7 @@ public abstract class Customer {
 	 * @return The Customer's Y location
 	 */
 	public final int getLocationY(){
-		// TO DO
+		return this.locationY;
 	}
 
 	/**
@@ -83,8 +118,8 @@ public abstract class Customer {
 	 * @return The distance between the restaurant and the Customer depending on the mode of delivery.
 	 */
 	public abstract double getDeliveryDistance();
-
 	
+
 	
 	/**
 	 * Compares *this* Customer object with an instance of an *other* Customer object and returns true if  

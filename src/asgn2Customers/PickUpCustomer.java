@@ -7,7 +7,7 @@ import asgn2Exceptions.CustomerException;
  *  distance should be zero.  A description of the class's fields and their constraints is provided 
  *  in Section 5.2 of the Assignment Specification.
  *
- * @author Person B
+ * @author Anderson Lee
  *
  */
 public class PickUpCustomer extends Customer {
@@ -27,7 +27,13 @@ public class PickUpCustomer extends Customer {
 	 * 
 	 */
 	public PickUpCustomer(String name, String mobileNumber, int locationX,  int locationY) throws CustomerException {
-		// TO DO	
+		
+		super( name, mobileNumber, locationX, locationY, "Pick Up" );
+		
+		// check if x and y are 0
+		if ( locationX != 0  || locationY != 0 ) { 
+			throw new CustomerException( "Invalid Location" ); 
+		}
 	}
 
 	/**
@@ -37,7 +43,17 @@ public class PickUpCustomer extends Customer {
 	 */
 	@Override
 	public double getDeliveryDistance() {
-		// TO DO
+		
+		if ( this.getLocationX() != 0 && this.getLocationY() != 0 ) {
+			String m= String.format("%s is at %d, therefore cannot pick up pizza", this.getName(), 
+					this.getLocationX(), this.getLocationY());
+			try {
+				throw new CustomerException( m);
+			} catch (CustomerException e) {
+				e.printStackTrace();
+			}
+		}
+		return 0;
 	}
 
 }

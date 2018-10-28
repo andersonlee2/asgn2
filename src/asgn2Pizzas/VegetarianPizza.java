@@ -28,11 +28,26 @@ public class VegetarianPizza extends Pizza {
 	 * @param quantity - The number of pizzas ordered 
 	 * @param orderTime - The time that the pizza order was made and sent to the kitchen 
 	 * @param deliveryTime - The time that the pizza was delivered to the customer
-	 * @throws PizzaException if supplied parameters are invalid 
+	 * @throws PizzaException if supplied parameters are invalid, exceptions will be rethrown into the GUI
 	 *
 	 */
+	
+	private static String type = "Vegetarian";
+	private static double price = 10.0;
+	
 	public VegetarianPizza(int quantity, LocalTime orderTime, LocalTime deliveryTime) throws PizzaException {
-		// TO DO
+		super(quantity, orderTime, deliveryTime, type, price);
+		
+		Toppings.removeAll(Toppings);
+		Toppings.add(PizzaTopping.TOMATO);
+		Toppings.add(PizzaTopping.CHEESE);
+		Toppings.add(PizzaTopping.EGGPLANT);
+		Toppings.add(PizzaTopping.MUSHROOM);
+		Toppings.add(PizzaTopping.CAPSICUM);
+		numOfToppings = 5;
 	}
-
+	
+	
+	
 }
+

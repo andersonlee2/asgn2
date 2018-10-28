@@ -1,5 +1,8 @@
 package asgn2Customers;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 import asgn2Exceptions.CustomerException;
 
 /** A class that represents a customer that has chosen to have their pizza delivered by a drone. 
@@ -11,7 +14,6 @@ import asgn2Exceptions.CustomerException;
  *
  */
 public class DroneDeliveryCustomer extends Customer {
-
 
 	/**
 	 *  This class represents a customer of the Pizza Palace restaurant that has chosen to have their pizza delivered by 
@@ -29,7 +31,8 @@ public class DroneDeliveryCustomer extends Customer {
 	 * 
 	 */
 	public DroneDeliveryCustomer(String name, String mobileNumber, int locationX, int locationY) throws CustomerException {
-		// TO DO		
+			
+		super( name, mobileNumber, locationX, locationY, "Drone Delivery" );
 	}
 
 	/**
@@ -40,9 +43,22 @@ public class DroneDeliveryCustomer extends Customer {
 	 */
 	@Override
 	public double getDeliveryDistance() {
-		// TO DO
-
+		
+		
+		double x = this.getLocationX();
+		double y = this.getLocationY();
+		
+		//flip to positive
+		double positiveX = x >0 ? -x : x;
+		double positiveY = y >0 ? -y : y;
+		
+		
+		double hypotenuse = Math.sqrt( (positiveX*positiveX) + (positiveY*positiveY) );
+		
+		return  hypotenuse ; 
 	}
+	
+	
 	
 
 }
